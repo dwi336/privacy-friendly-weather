@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/imageView"
+            android:layout_toRightOf="@+id/imageView"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:text="@string/app_name"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"

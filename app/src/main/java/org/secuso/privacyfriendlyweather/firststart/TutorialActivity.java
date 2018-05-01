@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -49,7 +49,7 @@ public class TutorialActivity extends AppCompatActivity {
     private PrefManager prefManager;
 
     PFASQLiteHelper database;
-    private AutoCompleteTextView autoCompleteTextView;
+    private AppCompatAutoCompleteTextView autoCompleteTextView;
     private AutoCompleteCityTextViewGenerator cityTextViewGenerator;
     private City selectedCity;
 
@@ -222,7 +222,7 @@ public class TutorialActivity extends AppCompatActivity {
                 btnNext.setText(getString(R.string.okay));
                 btnSkip.setVisibility(View.GONE);
 
-                autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTvAddFirstStart);
+                autoCompleteTextView = (AppCompatAutoCompleteTextView) findViewById(R.id.autoCompleteTvAddFirstStart);
                 cityTextViewGenerator.generate(autoCompleteTextView, 8, EditorInfo.IME_ACTION_DONE, new MyConsumer<City>() {
                     @Override
                     public void accept(City city) {

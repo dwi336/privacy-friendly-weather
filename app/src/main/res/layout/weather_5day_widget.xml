@@ -17,6 +17,7 @@
         android:layout_gravity="center"
         android:layout_weight="1"
         android:layout_marginEnd="11dp"
+        android:layout_marginRight="11dp"
         android:textSize="18dp"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -131,6 +132,7 @@
             android:orientation="vertical"
             android:layout_weight="1"
             android:paddingStart="11dp"
+            android:paddingLeft="11dp"
             >
             <TextView
                 android:id="@+id/widget_city_weather_5day_day3"
@@ -179,6 +181,7 @@
             android:orientation="vertical"
             android:layout_weight="1"
             android:paddingStart="11dp"
+            android:paddingLeft="11dp"
             >
             <TextView
                 android:id="@+id/widget_city_weather_5day_day4"
@@ -227,6 +230,7 @@
             android:orientation="vertical"
             android:layout_weight="1"
             android:paddingStart="11dp"
+            android:paddingLeft="11dp"
             >
             <TextView
                 android:id="@+id/widget_city_weather_5day_day5"

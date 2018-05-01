@@ -1,12 +1,14 @@
 package org.secuso.privacyfriendlyweather.dialogs;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,7 +19,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,7 @@ public class AddLocationDialog extends DialogFragment {
     View rootView;
     PFASQLiteHelper database;
 
-    private AutoCompleteTextView autoCompleteTextView;
+    private AppCompatAutoCompleteTextView autoCompleteTextView;
     private AutoCompleteCityTextViewGenerator cityTextViewGenerator;
     City selectedCity;
     // TODO Cleanup
@@ -56,7 +57,8 @@ public class AddLocationDialog extends DialogFragment {
     }
 
 
-    @Override
+    @SuppressLint("InflateParams")
+	@Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -72,7 +74,7 @@ public class AddLocationDialog extends DialogFragment {
         this.database = PFASQLiteHelper.getInstance(getActivity());
 
         cityTextViewGenerator = new AutoCompleteCityTextViewGenerator(getContext(), database);
-        autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.autoCompleteTvAddDialog);
+        autoCompleteTextView = (AppCompatAutoCompleteTextView) rootView.findViewById(R.id.autoCompleteTvAddDialog);
         cityTextViewGenerator.generate(autoCompleteTextView, LIST_LIMIT, EditorInfo.IME_ACTION_DONE, new MyConsumer<City>() {
             @Override
             public void accept(City city) {

@@ -7,10 +7,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
 
 import org.secuso.privacyfriendlyweather.R;
 import org.secuso.privacyfriendlyweather.database.City;
@@ -30,7 +30,7 @@ public class WeatherWidgetThreeDayForecastConfigureActivity extends Activity {
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private City selectedCity;
 
-    AutoCompleteTextView mAppWidgetText;
+    AppCompatAutoCompleteTextView mAppWidgetText;
     AutoCompleteCityTextViewGenerator generator;
     PFASQLiteHelper database;
 
@@ -143,7 +143,7 @@ public class WeatherWidgetThreeDayForecastConfigureActivity extends Activity {
             return;
         }
 
-        mAppWidgetText = (AutoCompleteTextView) findViewById(R.id.appwidget_text);
+        mAppWidgetText = (AppCompatAutoCompleteTextView) findViewById(R.id.appwidget_text);
 
         database = PFASQLiteHelper.getInstance(this);
         generator = new AutoCompleteCityTextViewGenerator(getApplicationContext(), database);

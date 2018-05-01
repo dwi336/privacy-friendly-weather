@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -15,7 +16,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -40,7 +40,7 @@ public class WeatherWidgetConfigureActivity extends Activity {
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private City selectedCity;
 
-    AutoCompleteTextView mAppWidgetText;
+    AppCompatAutoCompleteTextView mAppWidgetText;
     AutoCompleteCityTextViewGenerator generator;
     PFASQLiteHelper database;
 
@@ -151,7 +151,7 @@ public class WeatherWidgetConfigureActivity extends Activity {
         }
 
         Log.i("TGL", "onCreate");
-        mAppWidgetText = (AutoCompleteTextView) findViewById(R.id.appwidget_text);
+        mAppWidgetText = (AppCompatAutoCompleteTextView) findViewById(R.id.appwidget_text);
 
         database = PFASQLiteHelper.getInstance(this);
         generator = new AutoCompleteCityTextViewGenerator(getApplicationContext(), database);

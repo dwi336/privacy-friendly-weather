@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clipChildren="false"
@@ -19,8 +21,10 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/city_overview_list_item_text"
+        android:layout_toRightOf="@+id/city_overview_list_item_text"
         android:paddingStart="@dimen/card_margin"
+        android:paddingLeft="@dimen/card_margin"
         android:visibility="gone"
-        android:src="@drawable/ic_default_blue" />
+        app:srcCompat="@drawable/ic_default_blue" />
 
 </RelativeLayout>

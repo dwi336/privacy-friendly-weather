@@ -1,8 +1,12 @@
 package org.secuso.privacyfriendlyweather.activities;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -11,7 +15,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -38,7 +41,7 @@ public class RadiusSearchActivity extends BaseActivity {
      * Visual components
      */
     private AppPreferencesManager prefManager;
-    private AutoCompleteTextView edtLocation;
+    private AppCompatAutoCompleteTextView edtLocation;
     private SeekBar sbEdgeLength;
     private TextView tvEdgeLengthValue;
     private SeekBar sbNumReturns;
@@ -97,7 +100,7 @@ public class RadiusSearchActivity extends BaseActivity {
 
         // Visual components
         cityTextViewGenerator = new AutoCompleteCityTextViewGenerator(this, dbHelper);
-        edtLocation = (AutoCompleteTextView) findViewById(R.id.radius_search_edt_location);
+        edtLocation = (AppCompatAutoCompleteTextView) findViewById(R.id.radius_search_edt_location);
         cityTextViewGenerator.generate(edtLocation, LIMIT_LENGTH, EditorInfo.IME_ACTION_SEARCH, new MyConsumer<City>() {
             @Override
             public void accept(City city) {
@@ -181,10 +184,16 @@ public class RadiusSearchActivity extends BaseActivity {
 
     private void enableOkButton(Boolean enabled) {
         btnSearch.setEnabled(enabled);
+        int buttonResId = 0;
         if (enabled) {
-            btnSearch.setBackground(getResources().getDrawable(R.drawable.button_fullwidth));
+            buttonResId = R.drawable.button_fullwidth;
         } else  {
-            btnSearch.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+            buttonResId =  R.drawable.button_disabled;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        	btnSearch.setBackground(ResourcesCompat.getDrawable(getResources(), buttonResId, null));
+        } else {
+        	btnSearch.setBackgroundResource(buttonResId);
         }
     }
 

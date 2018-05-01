@@ -2,9 +2,36 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="preferenceTheme">@style/AppCompatPreferenceStyle</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppCompatPreferenceStyle" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <item name="preferenceFragmentCompatStyle">@style/CustomPreferenceFragment</item>
+        <item name="preferenceFragmentStyle">@style/CustomPreferenceFragment</item>
+        <item name="preferenceCategoryStyle">@style/CustomPreferenceCategory</item>
+        <item name="preferenceStyle">@style/CustomPreference</item>
+        <item name="dialogPreferenceStyle">@style/CustomPreferenceDialogStyle</item>
+    </style>
+
+    <style name="CustomPreferenceFragment">
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+        <item name="android:divider">@drawable/preference_list_divider_material</item>
+    </style>
+    
+    <style name="CustomPreferenceCategory">
+        <item name="android:layout">@layout/preference_category_text</item>
+    </style>
+    
+    <style name="CustomPreference">
+        <item name="android:layout">@layout/preference_text</item>
+    </style>
+    
+    <style name="CustomPreferenceDialogStyle">
+        <item name="android:layout">@layout/preference_text</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

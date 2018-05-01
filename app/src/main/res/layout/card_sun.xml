@@ -43,6 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:text="n/a"
                 android:textColor="@color/colorPrimaryDark" />
 
@@ -59,7 +60,9 @@
                 android:layout_height="1dp"
                 android:background="@color/colorAccent"
                 android:layout_toEndOf="@+id/sun"
+                android:layout_toRightOf="@+id/sun"
                 android:layout_toStartOf="@+id/moon"
+                android:layout_toLeftOf="@+id/moon"
                 android:layout_centerInParent="true"/>
 
             <ImageView
@@ -67,6 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:src="@mipmap/weather_icon_sunset" />
 
             <ImageView

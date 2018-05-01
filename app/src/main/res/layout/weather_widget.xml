@@ -9,7 +9,6 @@
     android:previewImage="@drawable/weather_widget_preview"
     android:minHeight="40dp"
     android:minWidth="250dp">
-    >
 
     <ImageView
         android:id="@+id/widget_city_weather_image_view"
@@ -29,6 +28,7 @@
         android:columnCount="4"
         android:layout_weight="1"
         android:paddingStart="11dp"
+        android:paddingLeft="11dp"
         >
 
         <TextView
@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="11dp"
+            android:layout_marginRight="11dp"
             android:textSize="18dp"
             android:layout_column="0"
             android:layout_row="0"
@@ -52,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="11dp"
+            android:layout_marginRight="11dp"
             android:textSize="12dp"
             android:layout_column="0"
             android:layout_row="1"
@@ -65,6 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="11dp"
+            android:layout_marginRight="11dp"
             android:textSize="12dp"
             android:layout_column="1"
             android:layout_row="1"
@@ -78,6 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="11dp"
+            android:layout_marginRight="11dp"
             android:textSize="12dp"
             android:layout_column="0"
             android:layout_row="2"
@@ -91,6 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="11dp"
+            android:layout_marginRight="11dp"
             android:textSize="12dp"
             android:layout_column="1"
             android:layout_row="2"
@@ -103,6 +108,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="11dp"
+            android:layout_marginRight="11dp"
             android:textSize="12dp"
             android:layout_column="2"
             android:layout_row="1"
@@ -116,6 +122,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="11dp"
+            android:layout_marginRight="11dp"
             android:textSize="12dp"
             android:layout_column="3"
             android:layout_row="1"
@@ -127,6 +134,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="11dp"
+            android:layout_marginRight="11dp"
             android:textSize="12dp"
             android:layout_column="2"
             android:layout_row="2"
@@ -141,6 +149,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="11dp"
+            android:layout_marginRight="11dp"
             android:textSize="12dp"
             android:layout_column="3"
             android:layout_row="2"
@@ -153,6 +162,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="11dp"
+            android:layout_marginRight="11dp"
             android:textSize="12dp"
             android:layout_column="0"
             android:layout_row="3"
@@ -166,6 +176,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="11dp"
+            android:layout_marginRight="11dp"
             android:textSize="12dp"
             android:layout_column="1"
             android:layout_row="3"

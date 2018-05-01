@@ -1,6 +1,7 @@
 package org.secuso.privacyfriendlyweather.ui.util;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -9,7 +10,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +33,7 @@ public class AutoCompleteCityTextViewGenerator {
     private PFASQLiteHelper dbHelper;
     private ArrayAdapter<City> cityAdapter;
     private Runnable selectAction;
-    private AutoCompleteTextView editField;
+    private AppCompatAutoCompleteTextView editField;
     private MyConsumer<City> cityConsumer;
     private int listLimit;
     private City selectedCity;
@@ -56,7 +56,7 @@ public class AutoCompleteCityTextViewGenerator {
      *                     else a java.lang.NullPointerException will be thrown.
      * @param listLimit    Determines how many items shall be shown in the drop down list at most.
      */
-    public void generate(AutoCompleteTextView editField, int listLimit, final int enterActionId, final MyConsumer<City> cityConsumer, final Runnable selectAction) {
+    public void generate(AppCompatAutoCompleteTextView editField, int listLimit, final int enterActionId, final MyConsumer<City> cityConsumer, final Runnable selectAction) {
         cityAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, new ArrayList<City>());
         this.editField = editField;
         this.cityConsumer = cityConsumer;
