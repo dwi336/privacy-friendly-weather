@@ -2,13 +2,13 @@ package org.secuso.privacyfriendlyweather.ui.RecycleList;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.secuso.privacyfriendlyweather.R;
 import org.secuso.privacyfriendlyweather.database.CurrentWeatherData;
@@ -223,7 +223,7 @@ public class CityWeatherAdapter extends RecyclerView.Adapter<CityWeatherAdapter.
         } else if (viewHolder.getItemViewType() == WEEK) {
 
             WeekViewHolder holder = (WeekViewHolder) viewHolder;
-            LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
             holder.recyclerView.setLayoutManager(layoutManager);
             WeekWeatherAdapter adapter = new WeekWeatherAdapter(forecastList, context);
             holder.recyclerView.setAdapter(adapter);

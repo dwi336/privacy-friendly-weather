@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
@@ -9,11 +9,16 @@
     </style>
 
     <style name="AppCompatPreferenceStyle" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <item name="preferenceScreenStyle">@style/CustomPreferenceScreen</item>
         <item name="preferenceFragmentCompatStyle">@style/CustomPreferenceFragment</item>
         <item name="preferenceFragmentStyle">@style/CustomPreferenceFragment</item>
         <item name="preferenceCategoryStyle">@style/CustomPreferenceCategory</item>
-        <item name="preferenceStyle">@style/CustomPreference</item>
         <item name="dialogPreferenceStyle">@style/CustomPreferenceDialogStyle</item>
+        <item name="editTextPreferenceStyle">@style/CustomPreferenceEditTextStyle</item>
+    </style>
+
+    <style name="CustomPreferenceScreen">
+        <item name="android:layout">@layout/preference_text</item>
     </style>
 
     <style name="CustomPreferenceFragment">
@@ -21,17 +26,29 @@
         <item name="android:paddingRight">0dp</item>
         <item name="android:divider">@drawable/preference_list_divider_material</item>
     </style>
-    
-    <style name="CustomPreferenceCategory">
+
+    <style name="CustomPreferenceCategory" parent="@style/Preference.Category">
         <item name="android:layout">@layout/preference_category_text</item>
     </style>
-    
+
     <style name="CustomPreference">
         <item name="android:layout">@layout/preference_text</item>
     </style>
-    
+
     <style name="CustomPreferenceDialogStyle">
         <item name="android:layout">@layout/preference_text</item>
+    </style>
+
+    <style name="CustomPreferenceEditTextStyle" parent="@style/Preference.DialogPreference.EditTextPreference">
+        <item name="android:layout">@layout/preference_text</item>
+    </style>
+
+     <style name="Preference_TextAppearanceMaterialBody2">
+        <item name="android:textSize">14sp</item>
+        <item name="android:typeface">sans</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

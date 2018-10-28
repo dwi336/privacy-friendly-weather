@@ -128,6 +128,10 @@ public class UpdateDataService extends IntentService {
             Process p1 = java.lang.Runtime.getRuntime().exec("ping -c 1 api.openweathermap.org");
             int returnVal = p1.waitFor();
             boolean reachable = (returnVal == 0);
+            // additional check if ping was not successful
+            if (returnVal != 0) {
+                reachable = java.net.InetAddress.getByName("api.openweathermap.org").isReachable(1000);
+            }
             return reachable;
         } catch (Exception e) {
 

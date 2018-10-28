@@ -21,6 +21,6 @@
     android:layout_height="wrap_content"
     android:textAppearance="@style/Preference_TextAppearanceMaterialBody2"
     android:textColor="?attr/colorAccent"
-    android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
-    android:paddingRight="?android:attr/listPreferredItemPaddingRight"
-    android:paddingTop="16dip" />
+    android:layout_marginLeft="?android:attr/listPreferredItemPaddingLeft"
+    android:layout_marginRight="?android:attr/listPreferredItemPaddingRight"
+    android:layout_marginTop="16dip" />
