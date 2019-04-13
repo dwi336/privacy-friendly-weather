@@ -152,7 +152,72 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
         this.context = context;
     }
 
-    public City getCityById(Integer id) {
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // on upgrade drop older tables
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_CITIES);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_FORECASTS);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_CURRENT_WEATHER);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_CITIES_TO_WATCH);
+
+        // create new tables
+        onCreate(db);
+    }
+
+    /**
+     * Fill TABLE_CITIES_TO_WATCH with all the Cities
+     */
+    private synchronized void fillCityDatabase(SQLiteDatabase db) {
+        long startInsertTime = System.currentTimeMillis();
+
+        InputStream inputStream = context.getResources().openRawResource(R.raw.city_list);
+        try {
+            FileReader fileReader = new FileReader();
+            final List<City> cities = fileReader.readCitiesFromFile(inputStream);
+            addCities(db, cities);
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        long endInsertTime = System.currentTimeMillis();
+        Log.d("debug_info", "Time for insert:" + String.valueOf(endInsertTime - startInsertTime));
+    }
+
+    private synchronized void addCities(SQLiteDatabase database, final List<City> cities) {
+        if (cities.size() > 0) {
+
+            //############################################
+            // construct everything into one statement
+//            StringBuilder sb = new StringBuilder();
+//            sb.append("INSERT INTO ").append(TABLE_CITIES).append(" VALUES ");
+//
+//            for (int i = 0; i < cities.size(); i++) {
+//                sb.append("(")
+//                        .append(cities.get(i).getCityId()).append(", ")
+//                        .append(cities.get(i).getCityName()).append(", ")
+//                        .append(cities.get(i).getCountryCode()).append(", ")
+//                        .append(cities.get(i).getPostalCode()).append(")");
+//                if(i < cities.size() - 1) {
+//                    sb.append(", ");
+//                }
+//            }
+//            String sql = sb.toString();
+//            database.rawQuery(sql, new String[]{});
+            //############################################
+            for (City c : cities) {
+                ContentValues values = new ContentValues();
+                values.put(CITIES_ID, c.getCityId());
+                values.put(CITIES_NAME, c.getCityName());
+                values.put(CITIES_COUNTRY_CODE, c.getCountryCode());
+                values.put(CITIES_POSTAL_CODE, c.getPostalCode());
+                database.insert(TABLE_CITIES, null, values);
+            }
+        }
+    }
+
+    public synchronized City getCityById(Integer id) {
         SQLiteDatabase database = this.getReadableDatabase();
 
         String[] args = {id.toString()};
@@ -180,7 +245,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
         return city;
     }
 
-    public List<City> getCitiesWhereNameLike(String cityNameLetters, int dropdownListLimit) {
+    public synchronized List<City> getCitiesWhereNameLike(String cityNameLetters, int dropdownListLimit) {
         List<City> cities = new ArrayList<>();
 
         SQLiteDatabase database = this.getReadableDatabase();
@@ -219,7 +284,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
     /**
      * Methods for TABLE_CITIES_TO_WATCH
      */
-    public void addCityToWatch(CityToWatch city) {
+    public synchronized void addCityToWatch(CityToWatch city) {
         SQLiteDatabase database = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -230,7 +295,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
         database.close();
     }
 
-    public CityToWatch getCityToWatch(int id) {
+    public synchronized CityToWatch getCityToWatch(int id) {
         SQLiteDatabase database = this.getWritableDatabase();
 
         String[] arguments = {String.valueOf(id)};
@@ -263,7 +328,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
 
     }
 
-    public boolean isCityWatched(int cityId) {
+    public synchronized boolean isCityWatched(int cityId) {
         SQLiteDatabase database = this.getReadableDatabase();
 
         String query = "SELECT " + CITIES_TO_WATCH_CITY_ID +
@@ -282,7 +347,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
         return result;
     }
 
-    public List<CityToWatch> getAllCitiesToWatch() {
+    public synchronized List<CityToWatch> getAllCitiesToWatch() {
         List<CityToWatch> cityToWatchList = new ArrayList<CityToWatch>();
 
         SQLiteDatabase database = this.getWritableDatabase();
@@ -317,7 +382,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
         return cityToWatchList;
     }
 
-    public int updateCityToWatch(CityToWatch cityToWatch) {
+    public synchronized int updateCityToWatch(CityToWatch cityToWatch) {
         SQLiteDatabase database = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -339,7 +404,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
     /**
      * Methods for TABLE_FORECAST
      */
-    public void addForecast(Forecast forecast) {
+    public synchronized void addForecast(Forecast forecast) {
         SQLiteDatabase database = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -355,7 +420,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
         database.close();
     }
 
-    public void deleteForecastsByCityId(int cityId) {
+    public synchronized void deleteForecastsByCityId(int cityId) {
         SQLiteDatabase database = this.getWritableDatabase();
         database.delete(TABLE_FORECAST, FORECAST_CITY_ID + " = ?",
                 new String[]{Integer.toString(cityId)});
@@ -363,7 +428,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
     }
 
 
-    public List<Forecast> getForecastForCityByDay(int cityId, Date day) {
+    public synchronized List<Forecast> getForecastForCityByDay(int cityId, Date day) {
         SQLiteDatabase database = this.getWritableDatabase();
 
         Cursor cursor = database.rawQuery("SELECT " + FORECAST_ID + ", " +
@@ -404,7 +469,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
         return list;
     }
 
-    public List<Forecast> getForecastsByCityId(int cityId) {
+    public synchronized List<Forecast> getForecastsByCityId(int cityId) {
         SQLiteDatabase database = this.getWritableDatabase();
 
         Cursor cursor = database.query(TABLE_FORECAST,
@@ -442,7 +507,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
         return list;
     }
 
-    public Forecast getForecast(int id) {
+    public synchronized Forecast getForecast(int id) {
         SQLiteDatabase database = this.getWritableDatabase();
 
         Cursor cursor = database.query(TABLE_FORECAST,
@@ -476,7 +541,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
 
     }
 
-    public List<Forecast> getAllForecasts() {
+    public synchronized List<Forecast> getAllForecasts() {
         List<Forecast> forecastList = new ArrayList<Forecast>();
 
         String selectQuery = "SELECT  * FROM " + TABLE_FORECAST;
@@ -505,7 +570,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
         return forecastList;
     }
 
-    public int updateForecast(Forecast forecast) {
+    public synchronized int updateForecast(Forecast forecast) {
         SQLiteDatabase database = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -521,7 +586,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
                 new String[]{String.valueOf(forecast.getId())});
     }
 
-    public void deleteForecast(Forecast forecast) {
+    public synchronized void deleteForecast(Forecast forecast) {
         SQLiteDatabase database = this.getWritableDatabase();
         database.delete(TABLE_FORECAST, FORECAST_ID + " = ?",
                 new String[]{Integer.toString(forecast.getId())});
@@ -531,7 +596,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
     /**
      * Methods for TABLE_CURRENT_WEATHER
      */
-    public void addCurrentWeather(CurrentWeatherData currentWeather) {
+    public synchronized void addCurrentWeather(CurrentWeatherData currentWeather) {
         SQLiteDatabase database = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -553,7 +618,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
         database.close();
     }
 
-    public CurrentWeatherData getCurrentWeather(int id) {
+    public synchronized CurrentWeatherData getCurrentWeather(int id) {
         SQLiteDatabase database = this.getWritableDatabase();
 
         Cursor cursor = database.query(TABLE_CURRENT_WEATHER,
@@ -598,7 +663,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
         return currentWeather;
     }
 
-    public CurrentWeatherData getCurrentWeatherByCityId(int cityId) {
+    public synchronized CurrentWeatherData getCurrentWeatherByCityId(int cityId) {
         SQLiteDatabase database = this.getReadableDatabase();
 
         Cursor cursor = database.query(TABLE_CURRENT_WEATHER,
@@ -643,7 +708,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
         return currentWeather;
     }
 
-    public List<CurrentWeatherData> getAllCurrentWeathers() {
+    public synchronized List<CurrentWeatherData> getAllCurrentWeathers() {
         List<CurrentWeatherData> currentWeatherList = new ArrayList<CurrentWeatherData>();
 
         String selectQuery = "SELECT * FROM " + TABLE_CURRENT_WEATHER;
@@ -678,7 +743,7 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
         return currentWeatherList;
     }
 
-    public int updateCurrentWeather(CurrentWeatherData currentWeather) {
+    public synchronized int updateCurrentWeather(CurrentWeatherData currentWeather) {
         SQLiteDatabase database = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -700,19 +765,17 @@ public class PFASQLiteHelper extends SQLiteAssetHelper {
                 new String[]{String.valueOf(currentWeather.getCity_id())});
     }
 
-    public void deleteCurrentWeather(CurrentWeatherData currentWeather) {
+    public synchronized void deleteCurrentWeather(CurrentWeatherData currentWeather) {
         SQLiteDatabase database = this.getWritableDatabase();
         database.delete(TABLE_CURRENT_WEATHER, CURRENT_WEATHER_ID + " = ?",
                 new String[]{Integer.toString(currentWeather.getId())});
         database.close();
     }
 
-    public void deleteCurrentWeatherByCityId(int cityId) {
+    public synchronized void deleteCurrentWeatherByCityId(int cityId) {
         SQLiteDatabase database = this.getWritableDatabase();
         database.delete(TABLE_CURRENT_WEATHER, CURRENT_WEATHER_CITY_ID + " = ?",
                 new String[]{Integer.toString(cityId)});
         database.close();
     }
-
-
 }
