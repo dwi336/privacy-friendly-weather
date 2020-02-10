@@ -6,7 +6,7 @@ This application is a privacy friendly weather app. The functionality includes a
 
 ## Motivation
 
-This application has been developed to be used as a basis for a Privacy Friendly App. Privacy Friendly Apps are group of Android applications which are optimized regarding privacy. Further information can be found on secuso.org/pfa
+This application has been developed to be used as a basis for a Privacy Friendly App. Privacy Friendly Apps are group of Android applications which are optimized regarding privacy. Further information can be found on [secuso.org/pfa](https://secuso.org/pfa)
 
 ## Building 
 
