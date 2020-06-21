@@ -32,6 +32,8 @@ import org.secuso.privacyfriendlyweather.services.UpdateDataService;
 import org.secuso.privacyfriendlyweather.ui.util.AutoCompleteCityTextViewGenerator;
 import org.secuso.privacyfriendlyweather.ui.util.MyConsumer;
 
+import static androidx.core.app.JobIntentService.enqueueWork;
+
 /**
  * Class structure taken from tutorial at http://www.androidhive.info/2016/05/android-build-intro-slider-app/
  * @author Karola Marky
@@ -180,7 +182,8 @@ public class TutorialActivity extends AppCompatActivity {
             Intent updateService = new Intent(this, UpdateDataService.class);
             updateService.setAction(UpdateDataService.UPDATE_ALL_ACTION);
             updateService.putExtra(UpdateDataService.CITY_ID, selectedCity.getCityId());
-            startService(updateService);
+            enqueueWork(this, UpdateDataService.class, 0, updateService);
+
         }
     }
 
@@ -208,7 +211,7 @@ public class TutorialActivity extends AppCompatActivity {
                     prefManager.setDefaultLocation(selectedCity.getCityId());
                     Intent intent = new Intent(getApplicationContext(), UpdateDataService.class);
                     intent.setAction(UpdateDataService.UPDATE_CURRENT_WEATHER_ACTION);
-                    startService(intent);
+                    enqueueWork(getApplicationContext(), UpdateDataService.class, 0, intent);
                 }
 
                 return null;
@@ -274,7 +277,7 @@ public class TutorialActivity extends AppCompatActivity {
 
             if(position == dots.length - 1) {
                 autoCompleteTextView = (AppCompatAutoCompleteTextView) view.findViewById(R.id.autoCompleteTvAddFirstStart);
-                cityTextViewGenerator.generate(autoCompleteTextView, 8, EditorInfo.IME_ACTION_DONE, new MyConsumer<City>() {
+                cityTextViewGenerator.generate(autoCompleteTextView, 100, EditorInfo.IME_ACTION_DONE, new MyConsumer<City>() {
                     @Override
                     public void accept(City city) {
                         selectedCity = city;

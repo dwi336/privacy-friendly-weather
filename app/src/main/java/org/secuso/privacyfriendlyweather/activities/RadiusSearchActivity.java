@@ -1,7 +1,6 @@
 package org.secuso.privacyfriendlyweather.activities;
 
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.ViewCompat;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
 import org.secuso.privacyfriendlyweather.R;
@@ -184,16 +184,10 @@ public class RadiusSearchActivity extends BaseActivity {
 
     private void enableOkButton(Boolean enabled) {
         btnSearch.setEnabled(enabled);
-        int buttonResId = 0;
         if (enabled) {
-            buttonResId = R.drawable.button_fullwidth;
+            ViewCompat.setBackground(btnSearch, ResourcesCompat.getDrawable(getResources(), R.drawable.button_fullwidth, null));
         } else  {
-            buttonResId =  R.drawable.button_disabled;
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        	btnSearch.setBackground(ResourcesCompat.getDrawable(getResources(), buttonResId, null));
-        } else {
-        	btnSearch.setBackgroundResource(buttonResId);
+            ViewCompat.setBackground(btnSearch, ResourcesCompat.getDrawable(getResources(), R.drawable.button_disabled, null));
         }
     }
 

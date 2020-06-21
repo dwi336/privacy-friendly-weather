@@ -1,7 +1,6 @@
 package org.secuso.privacyfriendlyweather.ui.RecycleList;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.secuso.privacyfriendlyweather.R;
 import org.secuso.privacyfriendlyweather.database.Forecast;
-import org.secuso.privacyfriendlyweather.preferences.AppPreferencesManager;
+import org.secuso.privacyfriendlyweather.ui.Help.StringFormatUtils;
 import org.secuso.privacyfriendlyweather.ui.UiResourceProvider;
 
-import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -45,7 +43,7 @@ public class WeekWeatherAdapter extends RecyclerView.Adapter<WeekWeatherAdapter.
         Forecast f = forecastList.get(position);
 
         setIcon(f.getWeatherID(), holder.weather);
-        holder.humidity.setText(String.format("%s %%", f.getHumidity()));
+        holder.humidity.setText(StringFormatUtils.formatInt(f.getHumidity(), "%"));
 
         Calendar c = new GregorianCalendar();
         c.setTime(f.getForecastTime());
@@ -77,18 +75,7 @@ public class WeekWeatherAdapter extends RecyclerView.Adapter<WeekWeatherAdapter.
                 day = R.string.abbreviation_monday;
         }
         holder.day.setText(day);
-
-        AppPreferencesManager prefManager =
-                new AppPreferencesManager(PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext()));
-        DecimalFormat decimalFormat = new DecimalFormat("#.0");
-        // Format the values to display
-        String heading = String.format(
-                "%s%s",
-                decimalFormat.format(prefManager.convertTemperatureFromCelsius(f.getTemperature())),
-                prefManager.getWeatherUnit()
-        );
-
-        holder.temperature.setText(heading);
+        holder.temperature.setText(StringFormatUtils.formatTemperature(context, f.getTemperature()));
     }
 
     @Override

@@ -1,6 +1,8 @@
 # Privacy Friendly Weather App
 
-[<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="60">](https://f-droid.org/repository/browse/?fdid=org.secuso.privacyfriendlyweather)<a href="https://play.google.com/store/apps/details?id=org.secuso.privacyfriendlyweather"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="60"></a>
+This application is a build of the original implementation also supporting older devices down to SDK 14, which is published under
+
+https://github.com/SecUSo/privacy-friendly-weather
 
 This application is a privacy friendly weather app. The functionality includes adding locations and watching the current and future weather for this location with weather details. Also, a radius search can be performed. This lets you find the locations with currently the best weather around a given location.
 
@@ -14,7 +16,7 @@ Further development requires Android Studio, we recommend to use at least versio
 
 ### API Reference
 
-Mininum SDK: 17
+Mininum SDK: 14
 Target SDK: 25
 
 ## License
@@ -35,7 +37,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-The icons used in the nagivation drawer are licensed under the [CC BY 2.5] (http://creativecommons.org/licenses/by/2.5/). In addition to them the app uses icons from [Google Design Material Icons](https://design.google.com/icons/index.html) licensed under Apache License Version 2.0. All other images (the logo of Privacy Friendly Apps, the SECUSO logo, the splash screen icon, the little weather icons and large weather images and the app icon) copyright [Technische Universtität Darmstadt] (www.tu-darmstadt.de) (2016).
+The icons used in the nagivation drawer are licensed under the [CC BY 2.5] (http://creativecommons.org/licenses/by/2.5/). In addition to them the app uses icons from [Google Design Material Icons](https://design.google.com/icons/index.html) licensed under Apache License Version 2.0. All other images (the logo of Privacy Friendly Apps, the SECUSO logo, the splash screen icon, the little weather icons and large weather images and the app icon) copyright [SECUSO](www.secuso.org) (2016).
 
 ## Contributors
 

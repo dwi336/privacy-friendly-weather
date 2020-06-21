@@ -6,23 +6,16 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.fragment.app.DialogFragment;
 
 import org.secuso.privacyfriendlyweather.R;
+import org.secuso.privacyfriendlyweather.activities.MainActivity;
 import org.secuso.privacyfriendlyweather.database.City;
 import org.secuso.privacyfriendlyweather.database.CityToWatch;
 import org.secuso.privacyfriendlyweather.database.PFASQLiteHelper;
@@ -48,7 +41,7 @@ public class AddLocationDialog extends DialogFragment {
     // TODO Cleanup
     private final List<City> allCities = new ArrayList<>();
 
-    final int LIST_LIMIT = 8;
+    final int LIST_LIMIT = 100;
 
     @Override
     public void onAttach(Activity activity) {
@@ -108,34 +101,35 @@ public class AddLocationDialog extends DialogFragment {
         if(database != null && !database.isCityWatched(selectedCity.getCityId())) {
             addCity();
         }
-
-        activity.recreate();
+        ((MainActivity)activity).addCityToList(convertCityToWatched());
         dismiss();
     }
 
-    //TODO setRank
-    public void addCity() {
+    private CityToWatch convertCityToWatched(){
         String postCode = "-";
         try {
             postCode = selectedCity.getPostalCode();
         } catch (NullPointerException e) {
 
         }
-
-        new AsyncTask<CityToWatch, Void, Void>() {
-            @Override
-            protected Void doInBackground(CityToWatch... params) {
-                database.addCityToWatch(params[0]);
-                return null;
-            }
-        }.doInBackground(new CityToWatch(
+        return new CityToWatch(
                 15,
                 postCode,
                 selectedCity.getCountryCode(),
                 -1,
                 selectedCity.getCityId(),
                 selectedCity.getCityName()
-        ));
+        );
     }
 
+    //TODO setRank
+    public void addCity() {
+        new AsyncTask<CityToWatch, Void, Void>() {
+            @Override
+            protected Void doInBackground(CityToWatch... params) {
+                database.addCityToWatch(params[0]);
+                return null;
+            }
+        }.doInBackground(convertCityToWatched());
+    }
 }

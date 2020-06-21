@@ -6,64 +6,46 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import org.secuso.privacyfriendlyweather.R;
 import org.secuso.privacyfriendlyweather.activities.ForecastCityActivity;
 import org.secuso.privacyfriendlyweather.database.City;
 import org.secuso.privacyfriendlyweather.database.CurrentWeatherData;
-import org.secuso.privacyfriendlyweather.database.PFASQLiteHelper;
 import org.secuso.privacyfriendlyweather.preferences.AppPreferencesManager;
+import org.secuso.privacyfriendlyweather.services.UpdateDataService;
 import org.secuso.privacyfriendlyweather.ui.UiResourceProvider;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
+import java.util.Date;
+import java.util.TimeZone;
+
+import static androidx.core.app.JobIntentService.enqueueWork;
+import static org.secuso.privacyfriendlyweather.services.UpdateDataService.SKIP_UPDATE_INTERVAL;
 
 /**
  * Implementation of App Widget functionality.
  * App Widget Configuration implemented in {@link WeatherWidgetConfigureActivity WeatherWidgetConfigureActivity}
  */
 public class WeatherWidget extends AppWidgetProvider {
-    private static final String PREFS_NAME = "org.secuso.privacyfriendlyweather.widget.WeatherWidget";
-    private static final String PREF_PREFIX_KEY = "appwidget_";
+    public static final String PREFS_NAME = "org.secuso.privacyfriendlyweather.widget.WeatherWidget";
+    public static final String PREF_PREFIX_KEY = "appwidget_";
 
-    static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager,
-                                final int appWidgetId) {
+    public void updateAppWidget(Context context, final int appWidgetId) {
 
-        //CharSequence widgetText = WeatherWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
-        // Construct the RemoteViews object
-        final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.weather_widget);
+        Intent intent = new Intent(context, UpdateDataService.class);
+        intent.setAction(UpdateDataService.UPDATE_WIDGET_ACTION);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        intent.putExtra("widget_type", 1);
+        intent.putExtra(SKIP_UPDATE_INTERVAL, true);
+        enqueueWork(context, UpdateDataService.class, 0, intent);
 
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        final Integer cityId = prefs.getInt(PREF_PREFIX_KEY + appWidgetId, -1);
-        if (cityId == -1) {
-            Toast.makeText(context, "cityId is null?", Toast.LENGTH_LONG);
-            return;
-        }
-
-        new AsyncTask<Integer, Void, Void>() {
-            @Override
-            protected Void doInBackground(Integer... params) {
-                PFASQLiteHelper database = PFASQLiteHelper.getInstance(context);
-                City city = database.getCityById(cityId);
-                CurrentWeatherData weatherData = database.getCurrentWeatherByCityId(city.getCityId());
-
-                updateView(context, appWidgetManager, views, appWidgetId, city, weatherData);
-
-                database.close();
-
-                return null;
-            }
-        }.doInBackground(cityId);
     }
 
-    private static void updateView(Context context, AppWidgetManager appWidgetManager, RemoteViews views, int appWidgetId, City city, CurrentWeatherData weatherData) {
+    public static void updateView(Context context, AppWidgetManager appWidgetManager, RemoteViews views, int appWidgetId, City city, CurrentWeatherData weatherData) {
         AppPreferencesManager prefManager =
                 new AppPreferencesManager(PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext()));
         DecimalFormat decimalFormat = new DecimalFormat("#.0");
@@ -73,17 +55,20 @@ public class WeatherWidget extends AppWidgetProvider {
                 prefManager.getWeatherUnit()
         );
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        timeFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTimeInMillis(weatherData.getTimeSunrise() * 1000);
-        String sunRise = timeFormat.format(cal.getTime());
-        cal.setTimeInMillis(weatherData.getTimeSunset() * 1000);
-        String sunSet = timeFormat.format(cal.getTime());
+        //correct for timezone differences
+        int zoneseconds = weatherData.getTimeZoneSeconds();
+
+        Date riseTime = new Date((weatherData.getTimeSunrise() + zoneseconds) * 1000L);
+        String sunRise = timeFormat.format(riseTime);
+        Date setTime = new Date((weatherData.getTimeSunset() + zoneseconds) * 1000L);
+        String sunSet = timeFormat.format(setTime);
 
         String windSpeed = String.format("%s m/s", weatherData.getWindSpeed());
 
         views.setTextViewText(R.id.widget_city_weather_temperature, temperature);
-        views.setTextViewText(R.id.widget_city_weather_humidity, String.format("%s %%", weatherData.getHumidity()));
+        views.setTextViewText(R.id.widget_city_weather_humidity, String.format("%s %%", (int) weatherData.getHumidity()));
         views.setTextViewText(R.id.widget_city_name, city.getCityName());
         views.setTextViewText(R.id.widget_city_weather_rise, sunRise);
         views.setTextViewText(R.id.widget_city_weather_set, sunSet);
@@ -94,7 +79,7 @@ public class WeatherWidget extends AppWidgetProvider {
         Intent intent = new Intent(context, ForecastCityActivity.class);
         intent.putExtra("cityId", city.getCityId());
         PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId, intent, 0);
-        views.setOnClickPendingIntent(R.id.widget_city_weather_image_view, pendingIntent);
+        views.setOnClickPendingIntent(R.id.widget1day_layout, pendingIntent);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -109,7 +94,7 @@ public class WeatherWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+            updateAppWidget(context, appWidgetId);
         }
     }
 

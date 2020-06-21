@@ -76,7 +76,7 @@ public class ForecastCityActivity extends BaseActivity implements IUpdateableCit
             public void onPageScrollStateChanged(int state) {}
         });
         viewPager.setCurrentItem(pagerAdapter.getPosForCityID(cityId));
-      
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager, true);
       
@@ -98,6 +98,8 @@ public class ForecastCityActivity extends BaseActivity implements IUpdateableCit
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        cityId = intent.getIntExtra("cityId", -1);
+        viewPager.setCurrentItem(pagerAdapter.getPosForCityID(cityId));
     }
 
     private void initResources() {
@@ -182,9 +184,13 @@ public class ForecastCityActivity extends BaseActivity implements IUpdateableCit
     }
 
     @Override
-    public void updateCurrentWeather(CurrentWeatherData data) {
+    public void setLastUpdateTime(CurrentWeatherData data) {
         if(refreshActionButton != null && refreshActionButton.getActionView() != null) {
             refreshActionButton.getActionView().clearAnimation();
+        }
+
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(pagerAdapter.getPageTitleForActionBar(viewPager.getCurrentItem()));
         }
     }
 
@@ -195,3 +201,4 @@ public class ForecastCityActivity extends BaseActivity implements IUpdateableCit
         }
     }
 }
+
